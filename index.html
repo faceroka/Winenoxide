@@ -5,16 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Wine.noxide</title>
   
-  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   
-  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   
-  <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <script>
     tailwind.config = {
@@ -67,11 +65,9 @@
 
   <div class="relative z-10 flex flex-col min-h-screen max-w-3xl mx-auto px-4 sm:px-6 py-6 md:py-10">
 
-    <!-- Header Section -->
     <header class="border-b border-zinc-200 dark:border-zinc-800/80 pb-6 mb-8 transition-colors">
       <div class="flex items-center justify-between gap-4">
         
-        <!-- Logo & Title -->
         <div class="flex items-center gap-3.5">
           <div class="w-11 h-11 flex-shrink-0 flex items-center justify-center rounded-xl bg-black dark:bg-zinc-900 border border-zinc-800 text-white shadow-sm transition-transform hover:scale-105">
             <svg class="w-7 h-7 text-white" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -96,7 +92,6 @@
           </h1>
         </div>
 
-        <!-- Controls: Theme & Admin -->
         <div class="flex items-center gap-2.5 font-mono">
           <button id="themeToggleBtn" title="Сменить тему" class="p-2 rounded-lg bg-zinc-100 dark:bg-zinc-900 hover:bg-zinc-200 dark:hover:bg-zinc-800 border border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 transition-colors">
             <i id="themeIconSun" data-lucide="sun" class="w-4 h-4 hidden"></i>
@@ -124,7 +119,6 @@
         </div>
       </div>
 
-      <!-- Search Input -->
       <div class="mt-5 flex items-center justify-between gap-3">
         <div class="relative w-full max-w-xs">
           <i data-lucide="search" class="w-3.5 h-3.5 text-zinc-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"></i>
@@ -145,13 +139,9 @@
       </div>
     </header>
 
-    <!-- Main Posts Stream -->
     <main class="flex-1">
-      <div id="postsList" class="space-y-7">
-        <!-- Rendered dynamically -->
-      </div>
+      <div id="postsList" class="space-y-7"></div>
 
-      <!-- Empty State -->
       <div id="emptyState" class="py-16 text-center border border-dashed border-zinc-300 dark:border-zinc-800 rounded-xl bg-zinc-100/50 dark:bg-zinc-900/30">
         <div class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-zinc-200 dark:bg-zinc-800 text-zinc-500 mb-2.5">
           <i data-lucide="inbox" class="w-5 h-5"></i>
@@ -163,7 +153,6 @@
       </div>
     </main>
 
-    <!-- Footer -->
     <footer class="mt-16 pt-6 border-t border-zinc-200 dark:border-zinc-800/80 flex items-center justify-between text-xs font-mono text-zinc-500">
       <div>&copy; <span id="currentYear">2026</span></div>
       <a 
@@ -178,7 +167,6 @@
     </footer>
   </div>
 
-  <!-- Admin Password Modal -->
   <div id="loginModal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm hidden items-center justify-center p-4">
     <div class="bg-white dark:bg-[#121212] border border-zinc-300 dark:border-zinc-800 w-full max-w-sm rounded-xl shadow-2xl p-5 relative modal-enter">
       <div class="flex items-center justify-between pb-3 border-b border-zinc-200 dark:border-zinc-800">
@@ -190,6 +178,8 @@
 
       <form id="loginForm" class="mt-4 space-y-3 font-mono">
         <div>
+          <label class="block text-[11px] uppercase tracking-wider text-zinc-500 dark:text-zinc-400 mb-1">Электронная почта</label>
+          <input type="email" id="adminEmailInput" required placeholder="admin@example.com" class="w-full bg-zinc-50 dark:bg-black border border-zinc-300 dark:border-zinc-800 rounded-lg px-3 py-2 text-xs text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-500 focus:outline-none focus:border-black dark:focus:border-white transition-colors mb-3">
           <label class="block text-[11px] uppercase tracking-wider text-zinc-500 dark:text-zinc-400 mb-1">Пароль</label>
           <input 
             type="password" 
@@ -214,7 +204,6 @@
     </div>
   </div>
 
-  <!-- Create/Edit Post Modal -->
   <div id="postModal" class="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm hidden items-center justify-center p-4 overflow-y-auto">
     <div class="bg-white dark:bg-[#121212] border border-zinc-300 dark:border-zinc-800 w-full max-w-lg rounded-xl shadow-2xl p-5 relative modal-enter my-8">
       <div class="flex items-center justify-between pb-3.5 border-b border-zinc-200 dark:border-zinc-800">
@@ -319,7 +308,6 @@
     </div>
   </div>
 
-  <!-- Lightbox -->
   <div id="lightboxModal" class="fixed inset-0 z-50 bg-black/95 backdrop-blur-md hidden items-center justify-center p-4">
     <button id="closeLightboxBtn" class="absolute top-5 right-5 text-zinc-400 hover:text-white p-2 z-10 transition-colors">
       <i data-lucide="x" class="w-6 h-6"></i>
@@ -330,39 +318,25 @@
     </div>
   </div>
 
-  <!-- Toast -->
   <div id="toastNotification" class="fixed bottom-6 right-6 z-50 hidden bg-zinc-950 text-white border border-zinc-800 px-4 py-2.5 rounded-lg shadow-xl font-mono text-xs items-center gap-2.5 transition-all">
     <i data-lucide="check" class="w-4 h-4 text-emerald-400"></i>
     <span id="toastMessage">Сохранено</span>
   </div>
 
   <script>
-    const STORAGE_KEY = "wine_noxide_monochrome_posts";
-    const ADMIN_STORAGE_KEY = "wine_noxide_is_admin";
     const THEME_STORAGE_KEY = "wine_noxide_theme";
 
-    // Хеш от пароля: k9#mX2$vL8!pQ4*yR7@wT1
-    const ADMIN_PASS_HASH = "1f7a6e14713426e2e411b931818dc48";
-
-    // Автономная хеш-функция (без внешних зависимостей и ограничений безопасности crypto API)
-    function fastHash(str) {
-      let h1 = 0xdeadbeef ^ 0, h2 = 0x41c6ce57 ^ 0;
-      for (let i = 0; i < str.length; i++) {
-        const ch = str.charCodeAt(i);
-        h1 = Math.imul(h1 ^ ch, 2654435761);
-        h2 = Math.imul(h2 ^ ch, 1597334677);
-      }
-      h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
-      h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
-      return (4294967296 * (2097151 & h2) + (h1 >>> 0)).toString(16);
-    }
+    // Публичные параметры Supabase. Секретный ключ сюда добавлять нельзя.
+    const SUPABASE_URL = "https://codzwvlvrawmlxbycnnf.supabase.co";
+    const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_ruhJEJBuaMctqYyAOV2QvQ_VFTJlEZL";
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
     let posts = [];
     let searchQuery = "";
     let currentBase64 = "";
+    let selectedImageFile = null;
     let isAdmin = false;
 
-    // DOM Elements
     const postsList = document.getElementById("postsList");
     const emptyState = document.getElementById("emptyState");
     const emptyHint = document.getElementById("emptyHint");
@@ -384,6 +358,7 @@
     const loginForm = document.getElementById("loginForm");
     const closeLoginModalBtn = document.getElementById("closeLoginModalBtn");
     const adminPasswordInput = document.getElementById("adminPasswordInput");
+    const adminEmailInput = document.getElementById("adminEmailInput");
     const loginErrorMessage = document.getElementById("loginErrorMessage");
     const themeToggleBtn = document.getElementById("themeToggleBtn");
     const themeIconSun = document.getElementById("themeIconSun");
@@ -407,12 +382,12 @@
 
     document.getElementById("currentYear").textContent = new Date().getFullYear();
 
-    function init() {
+    async function init() {
       initTheme();
-      checkAdminStatus();
-      loadPosts();
-      renderPosts();
       setupEventListeners();
+      await checkAdminStatus();
+      await loadPosts();
+      renderPosts();
       lucide.createIcons();
     }
 
@@ -439,16 +414,16 @@
       applyTheme(isDark ? "light" : "dark");
     }
 
-    function checkAdminStatus() {
-      isAdmin = localStorage.getItem(ADMIN_STORAGE_KEY) === "true";
+    async function checkAdminStatus() {
+      const { data: { session } } = await supabaseClient.auth.getSession();
+      isAdmin = !!session?.user;
       updateAdminUI();
-    }
 
-    function setAdminStatus(status) {
-      isAdmin = status;
-      localStorage.setItem(ADMIN_STORAGE_KEY, status ? "true" : "false");
-      updateAdminUI();
-      renderPosts();
+      supabaseClient.auth.onAuthStateChange((_event, session) => {
+        isAdmin = !!session?.user;
+        updateAdminUI();
+        renderPosts();
+      });
     }
 
     function updateAdminUI() {
@@ -461,21 +436,39 @@
       }
     }
 
-    function loadPosts() {
-      try {
-        const stored = localStorage.getItem(STORAGE_KEY);
-        posts = stored ? JSON.parse(stored) : [];
-      } catch (err) {
+    async function loadPosts() {
+      const { data, error } = await supabaseClient
+        .from("posts")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+      if (error) {
+        console.error("Supabase load error:", error);
         posts = [];
+        showToast("Не удалось загрузить проекты");
+        return;
       }
+
+      posts = (data || []).map(row => ({
+        id: row.id,
+        title: row.title,
+        description: row.description,
+        link: row.link,
+        imageUrl: row.image_url,
+        createdAt: row.created_at
+      }));
     }
 
-    function savePosts() {
-      try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(posts));
-      } catch (e) {
-        console.warn("Storage quota exceeded:", e);
-      }
+    async function uploadProjectImage(file) {
+      const extension = (file.name.split(".").pop() || "jpg").toLowerCase().replace(/[^a-z0-9]/g, "") || "jpg";
+      const path = `${crypto.randomUUID()}.${extension}`;
+      const { error } = await supabaseClient.storage
+        .from("project-images")
+        .upload(path, file, { upsert: false, contentType: file.type || "image/jpeg" });
+
+      if (error) throw error;
+      const { data } = supabaseClient.storage.from("project-images").getPublicUrl(path);
+      return data.publicUrl;
     }
 
     function showToast(message) {
@@ -622,6 +615,7 @@
         document.getElementById("postDescription").value = post.description;
         document.getElementById("postLink").value = post.link;
         currentBase64 = post.imageUrl;
+        selectedImageFile = null;
         showImagePreview(post.imageUrl);
         postImageUrl.value = post.imageUrl.startsWith("data:") ? "" : post.imageUrl;
       } else {
@@ -629,6 +623,7 @@
         postForm.reset();
         editPostId.value = "";
         currentBase64 = "";
+        selectedImageFile = null;
         hideImagePreview();
         switchToUrlTab();
       }
@@ -682,6 +677,7 @@
       modalImagePreviewContainer.classList.add("hidden");
       uploadFileName.textContent = "";
       postImageFile.value = "";
+      selectedImageFile = null;
       currentBase64 = "";
     }
 
@@ -701,16 +697,21 @@
       lightboxImage.src = "";
     }
 
-    window.deletePost = function(id) {
+    window.deletePost = async function(id) {
       if (!isAdmin) return;
       const target = posts.find(p => p.id === id);
       const title = target ? target.title : "проект";
-      if (confirm(`Удалить "${title}"?`)) {
-        posts = posts.filter(p => p.id !== id);
-        savePosts();
-        renderPosts();
-        showToast("Проект удален");
+      if (!confirm(`Удалить "${title}"?`)) return;
+
+      const { error } = await supabaseClient.from("posts").delete().eq("id", id);
+      if (error) {
+        console.error("Supabase delete error:", error);
+        showToast("Не удалось удалить проект");
+        return;
       }
+      await loadPosts();
+      renderPosts();
+      showToast("Проект удален");
     };
 
     window.editPost = function(id) {
@@ -728,21 +729,38 @@
         if (e.target === loginModal) closeLoginModal();
       });
 
-      loginForm.addEventListener("submit", (e) => {
+      loginForm.addEventListener("submit", async (e) => {
         e.preventDefault();
-        const inputVal = adminPasswordInput.value.trim();
+        loginErrorMessage.classList.add("hidden");
+        const { error } = await supabaseClient.auth.signInWithPassword({
+          email: adminEmailInput.value.trim(),
+          password: adminPasswordInput.value
+        });
 
-        if (fastHash(inputVal) === ADMIN_PASS_HASH) {
-          setAdminStatus(true);
-          closeLoginModal();
-          showToast("Авторизован");
-        } else {
+        if (error) {
+          console.error("Supabase login error:", error);
+          loginErrorMessage.textContent = "Не удалось войти. Проверьте почту и пароль.";
           loginErrorMessage.classList.remove("hidden");
+          return;
         }
+
+        isAdmin = true;
+        updateAdminUI();
+        renderPosts();
+        closeLoginModal();
+        showToast("Авторизация успешна");
       });
 
-      adminLogoutBtn.addEventListener("click", () => {
-        setAdminStatus(false);
+      adminLogoutBtn.addEventListener("click", async () => {
+        const { error } = await supabaseClient.auth.signOut();
+        if (error) {
+          console.error("Supabase logout error:", error);
+          showToast("Не удалось выйти");
+          return;
+        }
+        isAdmin = false;
+        updateAdminUI();
+        renderPosts();
         showToast("Выход выполнен");
       });
 
@@ -774,6 +792,7 @@
       postImageFile.addEventListener("change", (e) => {
         const file = e.target.files[0];
         if (!file) return;
+        selectedImageFile = file;
         uploadFileName.textContent = file.name;
         const reader = new FileReader();
         reader.onload = (event) => {
@@ -801,7 +820,7 @@
         renderPosts();
       });
 
-      postForm.addEventListener("submit", (e) => {
+      postForm.addEventListener("submit", async (e) => {
         e.preventDefault();
         if (!isAdmin) {
           showToast("Ошибка прав доступа");
@@ -809,37 +828,40 @@
           return;
         }
 
-        const title = document.getElementById("postTitle").value.trim();
-        const description = document.getElementById("postDescription").value.trim();
-        const link = document.getElementById("postLink").value.trim();
-        const idToEdit = editPostId.value;
+        const submitButton = document.getElementById("submitPostBtn");
+        submitButton.disabled = true;
+        submitButton.textContent = "Сохранение...";
 
-        let photo = currentBase64 || postImageUrl.value.trim();
-        if (!photo) {
-          photo = `https://placehold.co/1200x600/18181b/ffffff?text=${encodeURIComponent(title)}`;
-        }
+        try {
+          const title = document.getElementById("postTitle").value.trim();
+          const description = document.getElementById("postDescription").value.trim();
+          const link = document.getElementById("postLink").value.trim();
+          const idToEdit = editPostId.value;
 
-        if (idToEdit) {
-          const index = posts.findIndex(p => p.id === idToEdit);
-          if (index !== -1) {
-            posts[index] = { ...posts[index], title, description, link, imageUrl: photo };
-            showToast("Проект обновлен");
+          let photo = currentBase64 || postImageUrl.value.trim();
+          if (selectedImageFile) photo = await uploadProjectImage(selectedImageFile);
+          if (!photo) photo = `https://placehold.co/1200x600/18181b/ffffff?text=${encodeURIComponent(title)}`;
+
+          const payload = { title, description, link, image_url: photo };
+          let error;
+          if (idToEdit) {
+            ({ error } = await supabaseClient.from("posts").update(payload).eq("id", idToEdit));
+          } else {
+            ({ error } = await supabaseClient.from("posts").insert(payload));
           }
-        } else {
-          posts.unshift({
-            id: "wine-proj-" + Date.now(),
-            title,
-            description,
-            link,
-            imageUrl: photo,
-            createdAt: new Date().toISOString()
-          });
-          showToast("Проект опубликован");
-        }
 
-        savePosts();
-        renderPosts();
-        closeModal();
+          if (error) throw error;
+          await loadPosts();
+          renderPosts();
+          closeModal();
+          showToast(idToEdit ? "Проект обновлен" : "Проект опубликован");
+        } catch (error) {
+          console.error("Supabase save error:", error);
+          showToast("Ошибка сохранения проекта");
+        } finally {
+          submitButton.disabled = false;
+          submitButton.textContent = "Опубликовать";
+        }
       });
 
       document.addEventListener("keydown", (e) => {
@@ -851,7 +873,7 @@
       });
     }
 
-    window.onload = init;
+    window.addEventListener("load", init);
   </script>
 </body>
 </html>
